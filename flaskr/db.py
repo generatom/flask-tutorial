@@ -31,3 +31,8 @@ def init_db():
         db.execute(f.read().decode('utf8'))
 
     click.echo('Initialised the database.')
+
+
+def init_app(app):
+    app.teardown_appcontext(close_db)
+    app.cli.add_command(init_db)
