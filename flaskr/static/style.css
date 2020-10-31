@@ -22,5 +22,31 @@ nav ul li a, nav ul li span, header .action { display: block; padding: 0.5rem; }
 .content label { font-weight: bold; margin-bottom: 0.5em; }
 .content input, .content textarea, .content select { margin-bottom: 1em; }
 .content textarea { min-height: 12em; resize: vertical; }
+.content table {
+  margin: 0 25%;
+}
+table, th, td {
+  border-collapse: collapse;
+}
+th, td {
+  padding: 0.25em 1em;
+  border-right: 1px solid black;
+}
+th {
+  background: darkgrey;
+  color: #0a5384;
+}
+tr:nth-child(even) {
+  background: white
+}
+tr:nth-child(odd) {
+  background: lightgrey;
+}
+th.action, td.action {
+  border-right-style: none;
+}
+.users td.action {
+
+}
 input.danger { color: #cc2f2e; }
 input[type=submit] { align-self: start; min-width: 10em; }
