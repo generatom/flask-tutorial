@@ -97,7 +97,7 @@ def admin_required(view):
     def wrapped_view(**kwargs):
         if g.user is None:
             return redirect(url_for('auth.login'))
-        if g.user['admin'] != 1:
+        if g.user['admin'] not in ['read', 'read-write']:
             return redirect(url_for('blog.index'))
 
         return view(**kwargs)
