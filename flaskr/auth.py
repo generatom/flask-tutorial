@@ -76,6 +76,11 @@ def load_logged_in_user():
                                   (user_id,)).fetchone()
 
 
+@bp.before_app_request
+def load_admin_levels():
+    g.admin_levels = ['no', 'read', 'read-write']
+
+
 def login_required(view):
     @functools.wraps(view)
     def wrapped_view(**kwargs):
