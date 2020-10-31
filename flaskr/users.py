@@ -31,7 +31,7 @@ def edit(id):
         username_exists = db.execute('SELECT id FROM user WHERE username = ?',
                                      (username,)).fetchone() is not None
         error = None
-        query = None
+
         if username_new:
             if username_exists:
                 error = 'Username exists.'
@@ -52,6 +52,15 @@ def edit(id):
             return redirect(url_for('users.list'))
 
     return render_template('users/edit.html', user=user)
+
+
+@bp.route('/<int:id>/delete', methods=['GET', 'POST'])
+@admin_required
+def delete(id):
+    db = get_db()
+    db.execute('DELETE FROM user WHERE id = ?', (id,))
+    db.commit()
+    return redirect(url_for('users.list'))
 
 
 def get_user(id):
