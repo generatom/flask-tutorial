@@ -22,28 +22,33 @@ def list():
 @admin_required
 def edit(id):
     user = get_user(id)
+    admin_levels = g.admin_levels
 
     if request.method == 'POST':
+        error = None
         username = request.form['username']
-        admin = int(request.form['admin'])
+        admin = request.form['admin']
         db = get_db()
         username_new = (username != user['username'])
         username_exists = db.execute('SELECT id FROM user WHERE username = ?',
                                      (username,)).fetchone() is not None
-        error = None
 
         if username_new:
             if username_exists:
                 error = 'Username exists.'
             else:
                 db.execute(
-                    'UPDATE user SET username = ?, admin = ? WHERE id = ?',
-                    (username, admin, id)
+                    'UPDATE user SET username = ? WHERE id = ?',
+                    (username, id)
                 )
-        else:
+        if admin in admin_levels:
             db.execute(
                 'UPDATE user SET admin = ? WHERE id = ?', (admin, id)
             )
+        else:
+            error = error + '\n' if error else ''
+            error += 'Admin Status must be one of:'
+            error += ' {}'.format(', '.join(admin_levels))
 
         if error:
             flash(error)
@@ -51,7 +56,7 @@ def edit(id):
             db.commit()
             return redirect(url_for('users.list'))
 
-    return render_template('users/edit.html', user=user)
+    return render_template('users/edit.html', user=user, admin=admin_levels)
 
 
 @bp.route('/<int:id>/delete', methods=['GET', 'POST'])
